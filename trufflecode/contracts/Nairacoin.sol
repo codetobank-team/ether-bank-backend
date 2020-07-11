@@ -376,7 +376,7 @@ contract Nairacoin is StandardToken, Pausable, BlackList {
      */
     constructor(uint256 _initialSupply) public {
         name = "Naira";
-        symbol = "NGN";
+        symbol = "cNGN";
         decimals = 18;
 
         _totalSupply = (_initialSupply.mul(10**decimals));
