@@ -1,0 +1,35 @@
+{
+  "name": "ether-bank-backend",
+  "version": "1.0.0",
+  "description": "Backend of the hack to bank bootcamp project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codetobank-team/ether-bank-backend.git"
+  },
+  "keywords": [
+    "ethereum",
+    "bitcoin",
+    "transaction",
+    "token",
+    "transfer"
+  ],
+  "author": "oyekunle-mark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codetobank-team/ether-bank-backend/issues"
+  },
+  "homepage": "https://github.com/codetobank-team/ether-bank-backend#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "morgan": "^1.10.0",
+    "winston": "^3.3.3"
+  }
+}
