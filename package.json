@@ -4,7 +4,7 @@
   "description": "Backend of the hack to bank bootcamp project",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "start:dev": "nodemon src/server.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,8 @@
     "helmet": "^3.23.3",
     "morgan": "^1.10.0",
     "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
