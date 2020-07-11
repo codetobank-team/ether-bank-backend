@@ -21,7 +21,7 @@ const logger = (callingModule) => createLogger({
   ),
   transports: [
     new transports.Console(),
-    new transports.File({ filename: 'trace.log' }),
+    new transports.File({ filename: 'logs/trace.log' }),
   ],
   exitOnError: false,
 });
