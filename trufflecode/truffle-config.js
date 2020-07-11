@@ -14,7 +14,7 @@ module.exports = {
     // Settings to deploy Contract to the Ropsten
     ropsten: {
       provider: function () {
-        return new HDWalletProvider(MNEMONIC, "http://127.0.0.1:8545");
+        return new HDWalletProvider(MNEMONIC, "https://ropsten.infura.io/v3/ac007c67256342a2930b2560d4987e42");
       },
       network_id: 3,
       gas: 4000000, //make sure this gas allocation isn't over 4M, which is the max
