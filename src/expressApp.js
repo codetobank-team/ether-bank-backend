@@ -14,20 +14,16 @@ app.use(helmet());
 app.use(compression());
 app.use(cors());
 
-app.get('/', (_, res) =>
-  res.status(200).json({
-    status: 200,
-    message: `The ${APP_NAME} API is alive!!!`,
-  }),
-);
+app.get('/', (_, res) => res.status(200).json({
+  status: 200,
+  message: `The ${APP_NAME} API is alive!!!`,
+}));
 
 // TODO: set up express routes here
 
-app.use((_, res) =>
-  res.status(404).json({
-    status: 404,
-    message: 'Check the URL and try again.',
-  }),
-);
+app.use((_, res) => res.status(404).json({
+  status: 404,
+  message: 'Check the URL and try again.',
+}));
 
 module.exports = app;
