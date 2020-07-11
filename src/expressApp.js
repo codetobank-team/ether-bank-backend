@@ -3,6 +3,7 @@ const compression = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
 const logger = require('morgan');
+const rateLimit = require('express-rate-limit');
 const { APP_NAME } = require('./config');
 
 const app = express();
@@ -13,6 +14,12 @@ app.use(logger('dev'));
 app.use(helmet());
 app.use(compression());
 app.use(cors());
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 150,
+  message: 'You have exceeded the 300 requests in 15 mins limit.',
+  headers: true,
+}));
 
 app.get('/', (_, res) => res.status(200).json({
   status: 200,
