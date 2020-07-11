@@ -10,5 +10,5 @@ serverLogger.log('info', 'Server started');
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`${horizontalLine}${APP_NAME} is listening on port ${PORT}...${horizontalLine}`);
+  console.log(`${horizontalLine}${APP_NAME} is listening on port ${PORT}${horizontalLine}`);
 });
