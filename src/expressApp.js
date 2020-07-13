@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const logger = require('morgan');
 const rateLimit = require('express-rate-limit');
 const { APP_NAME } = require('./config');
+const { authRouter } = require('./routes');
 
 const app = express();
 
@@ -26,7 +27,7 @@ app.get('/', (_, res) => res.status(200).json({
   message: `The ${APP_NAME} API is alive!!!`,
 }));
 
-// TODO: set up express routes here
+app.use('/api/auth', authRouter);
 
 app.use((_, res) => res.status(404).json({
   status: 404,

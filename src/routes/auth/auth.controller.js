@@ -21,6 +21,8 @@ const register = async (req, res) => {
       transactionPin,
     });
 
+    authLogger.log('info', `User ${firstName} ${lastName} - ${email} created.`);
+
     return res.status(201).json({
       status: 201,
       data: {
@@ -30,7 +32,7 @@ const register = async (req, res) => {
       },
     });
   } catch (err) {
-    authLogger('error', `Error registering user: ${err.message}`);
+    authLogger.log('error', `Error registering user: ${err.message}`);
 
     return res.status(500).json({
       status: 500,
