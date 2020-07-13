@@ -14,8 +14,9 @@ const saveUser = async ({
     password,
     transactionPin,
   });
+  const newUser = await user.save();
 
-  await user.save();
+  return newUser;
 };
 
 const findUser = (email) => User.findOne({ email }).exec();

@@ -1,5 +1,9 @@
 const { saveUser, findUser } = require('./auth.service');
-const { logger } = require('../../utils');
+const { setAsync } = require('../../redis');
+const {
+  logger,
+  jwtUtils: { sign },
+} = require('../../utils');
 
 const authLogger = logger(module);
 
@@ -13,7 +17,7 @@ const register = async (req, res) => {
   } = req.body;
 
   try {
-    await saveUser({
+    const { _id } = await saveUser({
       firstName,
       lastName,
       email,
@@ -22,9 +26,12 @@ const register = async (req, res) => {
     });
 
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} created.`);
+    const token = sign({ id: _id });
+    await setAsync(`${_id}-token`, token);
 
     return res.status(201).json({
       status: 201,
+      token,
       data: {
         firstName,
         lastName,
@@ -36,7 +43,7 @@ const register = async (req, res) => {
 
     return res.status(500).json({
       status: 500,
-      message: `Error registering user: ${err.message}`,
+      error: `Error registering user: ${err.message}`,
     });
   }
 };
@@ -63,18 +70,26 @@ const login = async (req, res) => {
       });
     }
 
-    authLogger.log('info', `${email} logged in.`);
+    const { _id, firstName, lastName } = user;
+
+    authLogger.log('info', `User ${firstName} ${lastName} - ${email} logged in.`);
+    const token = sign({ id: _id });
+    await setAsync(`${_id}-token`, token);
 
     return res.status(200).json({
       status: 200,
-      data: {},
+      token,
+      data: {
+        firstName,
+        lastName,
+      },
     });
   } catch (err) {
     authLogger.log('error', `Error login user in: ${err.message}`);
 
     return res.status(500).json({
       status: 500,
-      message: `Error login user in: ${err.message}`,
+      error: `Error login user in: ${err.message}`,
     });
   }
 };
