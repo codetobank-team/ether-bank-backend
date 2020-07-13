@@ -3,6 +3,7 @@ const { setAsync } = require('../../redis');
 const {
   logger,
   jwtUtils: { sign },
+  responseObject,
 } = require('../../utils');
 
 const authLogger = logger(module);
@@ -29,22 +30,18 @@ const register = async (req, res) => {
     const token = sign({ id: _id });
     await setAsync(`${_id}-token`, token);
 
-    return res.status(201).json({
-      status: 201,
-      token,
-      data: {
-        firstName,
-        lastName,
-        email,
+    return responseObject(
+      res,
+      201,
+      {
+        _id, firstName, lastName, email,
       },
-    });
+      'data',
+      token,
+    );
   } catch (err) {
     authLogger.log('error', `Error registering user: ${err.message}`);
-
-    return res.status(500).json({
-      status: 500,
-      error: `Error registering user: ${err.message}`,
-    });
+    return responseObject(res, 500, `Error registering user: ${err.message}`, 'error');
   }
 };
 
@@ -54,21 +51,11 @@ const login = async (req, res) => {
   try {
     const user = await findUser(email);
 
-    if (!user) {
-      return res.status(400).json({
-        status: 400,
-        error: 'Incorrect username or password.',
-      });
-    }
+    if (!user) return responseObject(res, 400, 'Incorrect username or password.', 'error');
 
     const isMatch = await user.comparePassword(password);
 
-    if (!isMatch) {
-      return res.status(400).json({
-        status: 400,
-        error: 'No incorrect username or password.',
-      });
-    }
+    if (!isMatch) return responseObject(res, 400, 'Incorrect username or password.', 'error');
 
     const { _id, firstName, lastName } = user;
 
@@ -76,21 +63,17 @@ const login = async (req, res) => {
     const token = sign({ id: _id });
     await setAsync(`${_id}-token`, token);
 
-    return res.status(200).json({
-      status: 200,
+    return responseObject(
+      res,
+      200,
+      { _id, firstName, lastName },
+      'data',
       token,
-      data: {
-        firstName,
-        lastName,
-      },
-    });
+    );
   } catch (err) {
     authLogger.log('error', `Error login user in: ${err.message}`);
 
-    return res.status(500).json({
-      status: 500,
-      error: `Error login user in: ${err.message}`,
-    });
+    return responseObject(res, 500, `Error login user in: ${err.message}`, 'error');
   }
 };
 
