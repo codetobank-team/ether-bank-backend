@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   app:
@@ -13,3 +13,28 @@ services:
     volumes:
       - ".:/home/node/app"
       - "./docker/run.sh:/usr/bin/run.sh"
+    networks:
+      - ether_net
+
+  mongo:
+    image: mongo:4.2
+    container_name: ether_mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - "./docker/.data/mongo:/var/lib/mongo"
+    networks:
+      - ether_net
+
+  redis:
+    image: redis:6.0.5-alpine
+    container_name: ether_redis
+    ports:
+      - 6376:6379
+    volumes:
+      - "./docker/.data/redis:/data"
+    networks:
+      - ether_net
+
+networks:
+  ether_net:

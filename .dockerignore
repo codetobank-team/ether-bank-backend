@@ -1,8 +1,7 @@
 node_modules
-dist
-build
 logs
 *.log
 .vscode
 .git
 .DS_Store
+docker/.data
