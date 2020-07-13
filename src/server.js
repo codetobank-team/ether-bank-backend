@@ -14,10 +14,9 @@ const horizontalLine = '\n--------------------------------------------------\n';
 const serverLogger = logger(module);
 
 /* eslint-disable no-console */
-mongooseConnect(`${MONGO_HOST}:${MONGO_PORT}`).then(() => {
+mongooseConnect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/ether_bank`).then(() => {
   app.listen(PORT, () => {
     console.log(`${horizontalLine}${APP_NAME} is listening on port ${PORT}${horizontalLine}`);
+    serverLogger.log('info', 'Server started');
   });
 }).catch((err) => console.log('Error connecting to MongoDB: ', err));
-
-serverLogger.log('info', 'Server started');
