@@ -6,4 +6,5 @@ module.exports = {
   MONGO_PORT: process.env.MONGO_PORT,
   REDIS_HOST: process.env.REDIS_HOST,
   REDIS_PORT: process.env.REDIS_PORT,
+  JWT_SECRET: process.env.JWT_SECRET,
 };
