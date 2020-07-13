@@ -1,4 +1,4 @@
-const { saveUser } = require('./auth.service');
+const { saveUser, findUser } = require('./auth.service');
 const { logger } = require('../../utils');
 
 const authLogger = logger(module);
@@ -41,6 +41,37 @@ const register = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await findUser(email);
+    const isMatch = user.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        status: 400,
+        error: 'No incorrect username or password.',
+      });
+    }
+
+    authLogger.log('info', `${email} logged in.`);
+
+    return res.status(200).json({
+      status: 200,
+      data: {},
+    });
+  } catch (err) {
+    authLogger.log('error', `Error login user in: ${err.message}`);
+
+    return res.status(500).json({
+      status: 500,
+      message: `Error login user in: ${err.message}`,
+    });
+  }
+};
+
 module.exports = {
   register,
+  login,
 };
