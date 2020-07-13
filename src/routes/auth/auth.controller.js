@@ -46,7 +46,15 @@ const login = async (req, res) => {
 
   try {
     const user = await findUser(email);
-    const isMatch = user.comparePassword(password);
+
+    if (!user) {
+      return res.status(400).json({
+        status: 400,
+        error: 'Incorrect username or password.',
+      });
+    }
+
+    const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
       return res.status(400).json({
