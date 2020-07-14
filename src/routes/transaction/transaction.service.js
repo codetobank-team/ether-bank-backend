@@ -21,7 +21,9 @@ const saveTransaction = async ({
   return newTransaction;
 };
 
-const findTransaction = (transactionId) => Transaction.findOne({ _id: transactionId }).exec();
+const findTransaction = (transactionId) => Transaction.find({
+  $or: [{ senderId: transactionId }, { receiverId: transactionId }],
+}).exec();
 
 module.exports = {
   saveTransaction,

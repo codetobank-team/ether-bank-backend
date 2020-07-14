@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 const { saveTransaction, findTransaction } = require('./transaction.service');
-const { setAsync, getAsync } = require('../../redis');
 const { logger, responseObject } = require('../../utils');
 
 const transactionLogger = logger(module);
@@ -28,7 +27,6 @@ const createTransaction = async (req, res) => {
     });
 
     transactionLogger.log('info', `Transaction ${newTransaction._id} successful`);
-    await setAsync(`${newTransaction._id}-transaction`, JSON.stringify(newTransaction));
 
     return responseObject(res, 201, newTransaction, 'data');
   } catch (err) {
@@ -37,20 +35,14 @@ const createTransaction = async (req, res) => {
   }
 };
 
-const getTransaction = async (req, res) => {
+const getTransactions = async (req, res) => {
   const { id } = req.params;
 
   try {
-    let transaction = JSON.parse(await getAsync(`${id}-transaction`));
+    const transactions = await findTransaction(id);
 
-    if (!transaction) {
-      transaction = await findTransaction(id);
-
-      if (!transaction) return responseObject(res, 400, 'No transaction matches that ID', 'error');
-    }
-
-    transactionLogger.log('info', `Transaction ${id} retrieved.`);
-    return responseObject(res, 200, transaction, 'data');
+    transactionLogger.log('info', `Transactions for user ${id} retrieved.`);
+    return responseObject(res, 200, transactions, 'data');
   } catch (err) {
     transactionLogger.log('error', `Error retrieving transaction: ${err.message}`);
     return responseObject(res, 500, `Error retrieving transaction: ${err.message}`, 'error');
@@ -59,5 +51,5 @@ const getTransaction = async (req, res) => {
 
 module.exports = {
   createTransaction,
-  getTransaction,
+  getTransactions,
 };

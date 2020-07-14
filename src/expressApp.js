@@ -28,7 +28,7 @@ app.get('/', (_, res) => res.status(200).json({
 }));
 
 app.use('/api/auth', authRouter);
-app.use('/api/transaction', transactionRouter);
+app.use('/api/transactions', transactionRouter);
 
 app.use((_, res) => res.status(404).json({
   status: 404,
