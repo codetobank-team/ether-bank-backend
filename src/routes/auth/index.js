@@ -6,6 +6,7 @@ router.post(
   '/register',
   AuthMiddleware.registerValidationRules(),
   AuthMiddleware.validate,
+  AuthMiddleware.checkExistingEmail,
   register,
 );
 router.post(

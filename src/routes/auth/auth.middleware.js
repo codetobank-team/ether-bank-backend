@@ -1,5 +1,8 @@
 const { body, validationResult } = require('express-validator');
-const { responseObject } = require('../../utils');
+const { findUser } = require('./auth.service');
+const { responseObject, logger } = require('../../utils');
+
+const authMiddlewareLogger = logger(module);
 
 class AuthMiddleware {
   static registerValidationRules() {
@@ -39,6 +42,25 @@ class AuthMiddleware {
       .forEach((err) => extractedErrors.push({ [err.param]: err.msg }));
 
     return responseObject(res, 400, extractedErrors, 'error');
+  }
+
+  // eslint-disable-next-line consistent-return
+  static async checkExistingEmail(req, res, next) {
+    const { email } = req.body;
+
+    try {
+      const user = await findUser(email);
+
+      if (user) return responseObject(res, 400, 'Email already exist.', 'error');
+
+      next();
+    } catch (err) {
+      authMiddlewareLogger.log(
+        'error',
+        `Error retrieving email: ${err.message}`,
+      );
+      return responseObject(res, 500, `Error retrieving email: ${err.message}`);
+    }
   }
 }
 

@@ -51,11 +51,11 @@ const login = async (req, res) => {
   try {
     const user = await findUser(email);
 
-    if (!user) return responseObject(res, 400, 'Incorrect username or password.', 'error');
+    if (!user) return responseObject(res, 401, 'Incorrect username or password.', 'error');
 
     const isMatch = await user.comparePassword(password);
 
-    if (!isMatch) return responseObject(res, 400, 'Incorrect username or password.', 'error');
+    if (!isMatch) return responseObject(res, 401, 'Incorrect username or password.', 'error');
 
     const { _id, firstName, lastName } = user;
 
