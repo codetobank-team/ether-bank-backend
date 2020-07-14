@@ -21,6 +21,9 @@ const saveTransaction = async ({
   return newTransaction;
 };
 
+const findTransaction = (transactionId) => Transaction.findOne({ _id: transactionId }).exec();
+
 module.exports = {
   saveTransaction,
+  findTransaction,
 };
