@@ -17,10 +17,6 @@ class TransactionMiddleware {
         .withMessage(
           'Transaction status can only be PENDING, COMPLETED or FAILED',
         ),
-      body('email').isEmail(),
-      body('password')
-        .isLength({ min: 6 })
-        .withMessage('Password must be at least six characters long.'),
       body('amount').isLength({ min: 1 }),
     ];
   }
