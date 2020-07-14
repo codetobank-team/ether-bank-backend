@@ -18,6 +18,11 @@ class TransactionMiddleware {
           'Transaction status can only be PENDING, COMPLETED or FAILED',
         ),
       body('amount').isLength({ min: 1 }),
+      body('transactionPin')
+        .isLength({ min: 4, max: 4 })
+        .withMessage('Transaction pin must be four digits.')
+        .isNumeric()
+        .withMessage('Transaction pin must be digits.'),
     ];
   }
 
