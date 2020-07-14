@@ -34,7 +34,7 @@ const register = async (req, res) => {
       res,
       201,
       {
-        _id, firstName, lastName, email,
+        id: _id, firstName, lastName, email,
       },
       'data',
       token,
@@ -66,7 +66,7 @@ const login = async (req, res) => {
     return responseObject(
       res,
       200,
-      { _id, firstName, lastName },
+      { id: _id, firstName, lastName },
       'data',
       token,
     );
