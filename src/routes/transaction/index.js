@@ -4,9 +4,11 @@ const {
   getTransactions,
 } = require('./transaction.controller');
 const TransactionMiddleware = require('./transaction.middleware');
+const { isLoggedIn } = require('../../utils');
 
 router.post(
   '/send',
+  isLoggedIn,
   TransactionMiddleware.createTransactionValidationRules(),
   TransactionMiddleware.validate,
   TransactionMiddleware.validateUserWithIdExist,
@@ -14,6 +16,7 @@ router.post(
 );
 router.get(
   '/:id',
+  isLoggedIn,
   TransactionMiddleware.getTransactionsValidationRules(),
   TransactionMiddleware.validate,
   getTransactions,
