@@ -80,6 +80,7 @@ const logout = async (req, res) => {
   try {
     const { userId } = req;
     await delAsync(`${userId}-token`);
+    authLogger.log('info', `User ${userId} logged out.`);
 
     return responseObject(res, 200, 'You were successfully logged out', 'message');
   } catch (err) {

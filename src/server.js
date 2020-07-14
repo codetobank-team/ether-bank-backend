@@ -3,20 +3,30 @@ const app = require('./expressApp');
 const mongooseConnect = require('./database/connect');
 const { logger } = require('./utils');
 const {
+  NODE_ENV,
   PORT,
   APP_NAME,
   MONGO_HOST,
   MONGO_PORT,
+  MONGO_DB_NAME,
+  ATLAS_DB_NAME,
+  ATLAS_PASSWORD,
 } = require('./config');
 
 const horizontalLine = '\n--------------------------------------------------\n';
-
 const serverLogger = logger(module);
+const connectionUrl = NODE_ENV === 'development'
+  ? `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB_NAME}`
+  : `mongodb+srv://ether-dev-db:${ATLAS_PASSWORD}@etherbank-dev-db.75jle.mongodb.net/${ATLAS_DB_NAME}?retryWrites=true&w=majority`;
 
 /* eslint-disable no-console */
-mongooseConnect(`mongodb://${MONGO_HOST}:${MONGO_PORT}/ether_bank`).then(() => {
-  app.listen(PORT, () => {
-    console.log(`${horizontalLine}${APP_NAME} is listening on port ${PORT}${horizontalLine}`);
-    serverLogger.log('info', 'Server started');
-  });
-}).catch((err) => console.log('Error connecting to MongoDB: ', err));
+mongooseConnect(connectionUrl)
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(
+        `${horizontalLine}${APP_NAME} is listening on port ${PORT}${horizontalLine}`,
+      );
+      serverLogger.log('info', 'Server started');
+    });
+  })
+  .catch((err) => console.log('Error connecting to MongoDB: ', err));
