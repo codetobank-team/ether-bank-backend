@@ -1,5 +1,5 @@
 const { saveUser, findUser } = require('./auth.service');
-const { setAsync } = require('../../redis');
+const { setAsync, delAsync } = require('../../redis');
 const {
   logger,
   jwtUtils: { sign },
@@ -72,12 +72,24 @@ const login = async (req, res) => {
     );
   } catch (err) {
     authLogger.log('error', `Error login user in: ${err.message}`);
-
     return responseObject(res, 500, `Error login user in: ${err.message}`, 'error');
+  }
+};
+
+const logout = async (req, res) => {
+  try {
+    const { userId } = req;
+    await delAsync(`${userId}-token`);
+
+    return responseObject(res, 200, 'You were successfully logged out', 'message');
+  } catch (err) {
+    authLogger.log('error', `Error login user out: ${err.message}`);
+    return responseObject(res, 500, `Error login user out: ${err.message}`, 'error');
   }
 };
 
 module.exports = {
   register,
   login,
+  logout,
 };

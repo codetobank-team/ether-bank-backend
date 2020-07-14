@@ -30,6 +30,12 @@ class AuthMiddleware {
     ];
   }
 
+  static logoutValidationRules() {
+    return [
+      body('id').isMongoId().withMessage('Invalid id supplied'),
+    ];
+  }
+
   static validate(req, res, next) {
     const errors = validationResult(req);
 
