@@ -5,3 +5,5 @@ logs
 .git
 .DS_Store
 docker/.data
+.env
+.env.sample

@@ -1,4 +1,5 @@
-const { saveUser, findUser } = require('./auth.service');
+const { saveUser, findUser, findUserById } = require('./auth.service');
+const { createUserWallet } = require('../wallet/wallet.service');
 const { setAsync, delAsync } = require('../../redis');
 const {
   logger,
@@ -9,6 +10,7 @@ const {
 const authLogger = logger(module);
 
 const register = async (req, res) => {
+  let wallet = {};
   const {
     firstName,
     lastName,
@@ -26,15 +28,19 @@ const register = async (req, res) => {
       transactionPin,
     });
 
+    if (_id) {
+      wallet = await createUserWallet(_id, transactionPin);
+    }
+
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} created.`);
     const token = sign({ id: _id });
-    await setAsync(`${_id}-token`, token);
+    await setAsync(`${_id}-token`, token, 'EX', 60 * 30);
 
     return responseObject(
       res,
       201,
       {
-        id: _id, firstName, lastName, email,
+        id: _id, firstName, lastName, email, wallet,
       },
       'data',
       token,
@@ -61,7 +67,7 @@ const login = async (req, res) => {
 
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} logged in.`);
     const token = sign({ id: _id });
-    await setAsync(`${_id}-token`, token);
+    await setAsync(`${_id}-token`, token, 'EX', 60 * 30);
 
     return responseObject(
       res,
@@ -73,6 +79,19 @@ const login = async (req, res) => {
   } catch (err) {
     authLogger.log('error', `Error login user in: ${err.message}`);
     return responseObject(res, 500, `Error login user in: ${err.message}`, 'error');
+  }
+};
+
+const user = async (req, res) => {
+  const { userId } = req;
+
+  try {
+    const currentUser = await findUserById(userId);
+    authLogger.log('info', `User with ${userId} retrieved.`);
+    return responseObject(res, 200, currentUser, 'data');
+  } catch (error) {
+    authLogger.log('error', `Error retrieving user: ${error.message}`);
+    return responseObject(res, 500, `Error retrieving user: ${error.message}`, 'error');
   }
 };
 
@@ -92,5 +111,6 @@ const logout = async (req, res) => {
 module.exports = {
   register,
   login,
+  user,
   logout,
 };

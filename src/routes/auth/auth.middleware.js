@@ -47,7 +47,7 @@ class AuthMiddleware {
       .array()
       .forEach((err) => extractedErrors.push({ [err.param]: err.msg }));
 
-    return responseObject(res, 400, extractedErrors, 'error');
+    return responseObject(res, 400, extractedErrors, 'errors');
   }
 
   // eslint-disable-next-line consistent-return

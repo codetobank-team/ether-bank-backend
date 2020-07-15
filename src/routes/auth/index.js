@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { register, login, logout } = require('./auth.controller');
+const { register, login, user, logout } = require('./auth.controller');
 const AuthMiddleware = require('./auth.middleware');
 const { isLoggedIn } = require('../../utils');
 
@@ -15,6 +15,11 @@ router.post(
   AuthMiddleware.loginValidationRules(),
   AuthMiddleware.validate,
   login,
+);
+router.get(
+  '/user',
+  isLoggedIn,
+  user,
 );
 router.post(
   '/logout',

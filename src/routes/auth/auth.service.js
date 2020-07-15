@@ -21,7 +21,10 @@ const saveUser = async ({
 
 const findUser = (email) => User.findOne({ email }).exec();
 
+const findUserById = (id) => User.findById(id).exec();
+
 module.exports = {
   saveUser,
   findUser,
+  findUserById,
 };
