@@ -44,15 +44,20 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.password;
+  delete user.transactionPin;
+  return user;
+};
+
 userSchema.methods.comparePassword = async function (inputPassword) {
   const result = await compare(inputPassword, this.password);
-
   return result;
 };
 
 userSchema.methods.compareTransactionPin = async function (inputPin) {
   const result = await compare(inputPin, this.pin);
-
   return result;
 };
 
