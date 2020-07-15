@@ -24,6 +24,6 @@ module.exports = async (req, res, next) => {
     req.userId = id;
     next();
   } catch (err) {
-    return responseObject(res, 500, `Eror: ${err.message}`, 'error');
+    return responseObject(res, 500, `Error: ${err.message}`, 'error');
   }
 };
