@@ -1,13 +1,19 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
-  senderId: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  receiverId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  sender: {
+    type: String,
+    ref: 'Wallet',
+  },
+  recipient: {
+    type: String,
+    ref: 'Wallet',
   },
   hash: {
     type: String,
@@ -15,7 +21,7 @@ const transactionSchema = new mongoose.Schema({
   },
   transactionType: {
     type: String,
-    enum: ['SENT', 'RECEIVED'],
+    enum: ['sent', 'received'],
   },
   amount: {
     type: String,
@@ -23,7 +29,21 @@ const transactionSchema = new mongoose.Schema({
   },
   transactionStatus: {
     type: String,
-    enum: ['PENDING', 'COMPLETED', 'FAILED'],
+    enum: ['pending', 'completed', 'failed'],
+    default: 'pending',
+  },
+  blockchainTimestamp: {
+    type: Number,
+    default: null,
+  },
+}, {
+  timestamps: true,
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = doc._id;
+      delete ret._id;
+      delete ret.__v;
+    },
   },
 });
 

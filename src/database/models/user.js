@@ -1,4 +1,6 @@
 /* eslint-disable func-names */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 const mongoose = require('mongoose');
 const {
   bcryptUtils: { hash, compare },
@@ -28,6 +30,15 @@ const userSchema = new mongoose.Schema({
   },
 }, {
   timestamps: true,
+  toJSON: {
+    transform(doc, ret) {
+      ret.id = doc._id;
+      delete ret._id;
+      delete ret.__v;
+      delete ret.password;
+      delete ret.transactionPin;
+    },
+  },
 });
 
 userSchema.pre('save', async function (next) {
@@ -43,13 +54,6 @@ userSchema.pre('save', async function (next) {
 
   next();
 });
-
-userSchema.methods.toJSON = function () {
-  const user = this.toObject();
-  delete user.password;
-  delete user.transactionPin;
-  return user;
-};
 
 userSchema.methods.comparePassword = async function (inputPassword) {
   const result = await compare(inputPassword, this.password);
