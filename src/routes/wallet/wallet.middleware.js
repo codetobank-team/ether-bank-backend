@@ -6,7 +6,7 @@ const { logger, responseObject } = require('../../utils');
 const walletMiddlewareLogger = logger(module);
 
 class WalletMiddleware {
-  static validate(req, res, next) {    
+  static validate(req, res, next) {
     const errors = validationResult(req);
 
     if (errors.isEmpty()) return next();

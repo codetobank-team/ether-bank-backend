@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 require('dotenv').config();
 const app = require('./expressApp');
 const mongooseConnect = require('./database/connect');
@@ -15,9 +16,12 @@ const {
 
 const horizontalLine = '\n--------------------------------------------------\n';
 const serverLogger = logger(module);
+
 const connectionUrl = NODE_ENV === 'development'
   ? `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB_NAME}`
-  : `mongodb+srv://ether-dev-db:${ATLAS_PASSWORD}@etherbank-dev-db.75jle.mongodb.net/${ATLAS_DB_NAME}?retryWrites=true&w=majority`;
+  : NODE_ENV === 'stage'
+    ? `mongodb+srv://ether-dev-db:${ATLAS_PASSWORD}@etherbank-dev-db.75jle.mongodb.net/${ATLAS_DB_NAME}?retryWrites=true&w=majority`
+    : `mongodb+srv://ether-prod-user:${ATLAS_PASSWORD}@etherbank-prod.e1lan.mongodb.net/${ATLAS_DB_NAME}?retryWrites=true&w=majority`;
 
 /* eslint-disable no-console */
 mongooseConnect(connectionUrl)
