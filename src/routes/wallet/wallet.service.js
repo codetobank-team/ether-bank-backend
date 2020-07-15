@@ -1,6 +1,6 @@
 const { Wallet } = require('../../database/models');
 const {
-  logger, blockUtils: { createWallet }, accountNumber: { generate }, cryptoUtils: { encrypt },
+  logger, blockUtils: { createWallet, addressBalance }, accountNumber: { generate }, cryptoUtils: { encrypt },
 } = require('../../utils');
 
 const WalletServiceLogger = logger(module);
@@ -26,4 +26,15 @@ const createUserWallet = async (userId, userPin) => {
   return wallet;
 };
 
-module.exports = { findUserWallet, createUserWallet };
+const getAddressBalance = async (address) => {
+  let balance = '0.00';
+  try {
+    balance = await addressBalance(address);
+  } catch (error) {
+    WalletServiceLogger.log('error', `Error getting address balance: ${address}`);
+  }
+
+  return balance;
+};
+
+module.exports = { findUserWallet, createUserWallet, getAddressBalance };

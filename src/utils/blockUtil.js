@@ -4,7 +4,7 @@
 const Ethers = require('ethers');
 const Web3 = require('web3');
 const NairaCoin = require('../contract/build/contracts/Nairacoin.json');
-const ContractAbi = require('../contract/build/ethersabi/etherscontract.json');
+const tokenABI = require('../contract/build/ethersabi/etherscontract.json');
 const { CONTRACT_ADDRESS, CONTRACT_PRIVATE_KEY } = require('../config');
 const { EthersProvider, Web3Provider } = require('./ethProvider.js');
 
@@ -13,9 +13,14 @@ const contractConnection = async (contractPrivateKey, contractAddress) => {
   contractAddress = contractAddress || CONTRACT_ADDRESS;
   const provider = await EthersProvider();
   const contractWallet = await new Ethers.Wallet(contractPrivateKey, provider);
-  const contract = await new Ethers.Contract(contractAddress, ContractAbi, provider);
+  const contract = await new Ethers.Contract(contractAddress, tokenABI, provider);
   return contract.connect(contractWallet);
 };
+
+const web3Connection = () => {
+  const web3 = Web3Provider();
+  return new web3.eth.Contract(tokenABI, CONTRACT_ADDRESS);
+}
 
 const createWallet = () => {
   const newWallet = Ethers.Wallet.createRandom();
@@ -42,9 +47,9 @@ const restoreWallet = (mnemonic) => {
 };
 
 const addressBalance = async (address) => {
-  const connection = await contractConnection();
-  const balanceInWei = connection.balanceOf(address);
-  return Web3.utils.fromWei(balanceInWei.toString(), 'ether');
+  const contract = web3Connection();
+  const balance = await contract.methods.balanceOf(address).call();
+  return balance;
 };
 
 module.exports = {
