@@ -1,33 +1,38 @@
 const { body, param, validationResult } = require('express-validator');
-const { findUserById } = require('../auth/auth.service');
-const { responseObject, logger } = require('../../utils');
+// const { findUserById } = require('../auth/auth.service');
+const { responseObject } = require('../../utils');
 
-const transactionMiddlewareLogger = logger(module);
+// const transactionMiddlewareLogger = logger(module);
 
 class TransactionMiddleware {
   static createTransactionValidationRules() {
     return [
-      body('senderId').isMongoId(),
-      body('receiverId').isMongoId(),
-      body('transactionType')
-        .isIn(['SENT', 'RECEIVED'])
-        .withMessage('Transaction type can only be SENT or RECEIVED'),
-      body('transactionStatus')
-        .isIn(['PENDING', 'COMPLETED', 'FAILED'])
-        .withMessage(
-          'Transaction status can only be PENDING, COMPLETED or FAILED',
-        ),
-      body('amount').isLength({ min: 1 }),
+      // body('senderId').isMongoId(),
+      // body('receiverId').isMongoId(),
+      // body('transactionType')
+      //   .isIn(['sent', 'received'])
+      //   .withMessage('Transaction type can only be sent or received'),
+      // body('transactionStatus')
+      //   .isIn(['pending', 'completed', 'failed'])
+      //   .withMessage(
+      //     'Transaction status can only be pending, completed or failed',
+      //   ),
+      body('address').isEthereumAddress(),
+      body('amount')
+        .isNumeric()
+        .withMessage('Amount must be numeric')
+        .isInt({ gt: 0 })
+        .withMessage('Amount must be greater than 0'),
       body('transactionPin')
         .isLength({ min: 4, max: 4 })
-        .withMessage('Transaction pin must be four digits.')
+        .withMessage('Transaction PIN length must be 4.')
         .isNumeric()
-        .withMessage('Transaction pin must be digits.'),
+        .withMessage('Transaction PIN must be numeric.'),
     ];
   }
 
   static getTransactionsValidationRules() {
-    return [param('id').isMongoId().withMessage('Invalid user ID')];
+    return [param('id').isMongoId().withMessage('Invalid transaction ID')];
   }
 
   static validate(req, res, next) {
@@ -41,10 +46,11 @@ class TransactionMiddleware {
       .array()
       .forEach((err) => extractedErrors.push({ [err.param]: err.msg }));
 
-    return responseObject(res, 400, extractedErrors, 'error');
+    return responseObject(res, 400, extractedErrors, 'errors');
   }
 
   // eslint-disable-next-line consistent-return
+  /*
   static async validateUserWithIdExist(req, res, next) {
     const { senderId, receiverId } = req.body;
 
@@ -52,7 +58,8 @@ class TransactionMiddleware {
       const userSender = await findUserById(senderId);
       const userReceiver = await findUserById(receiverId);
 
-      if (!userSender || !userReceiver) return responseObject(res, 400, 'User with that ID does not exist', 'error');
+      if (!userSender || !userReceiver)
+        return responseObject(res, 400, 'User with that ID does not exist', 'error');
 
       next();
     } catch (err) {
@@ -63,6 +70,7 @@ class TransactionMiddleware {
       return responseObject(res, 500, `Error retrieving user: ${err.message}`);
     }
   }
+  */
 }
 
 module.exports = TransactionMiddleware;
