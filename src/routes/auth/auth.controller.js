@@ -1,4 +1,4 @@
-const { saveUser, findUser } = require('./auth.service');
+const { saveUser, findUser, findUserById } = require('./auth.service');
 const { setAsync, delAsync } = require('../../redis');
 const {
   logger,
@@ -76,6 +76,19 @@ const login = async (req, res) => {
   }
 };
 
+const user = async (req, res) => {
+  const { userId } = req;
+
+  try {
+    const currentUser = await findUserById(userId);
+    authLogger.log('info', `User with ${userId} retrieved.`);
+    return responseObject(res, 200, currentUser, 'data');
+  } catch (error) {
+    authLogger.log('error', `Error retrieving user: ${error.message}`);
+    return responseObject(res, 500, `Error retrieving user: ${error.message}`, 'error');
+  }
+};
+
 const logout = async (req, res) => {
   try {
     const { userId } = req;
@@ -92,5 +105,6 @@ const logout = async (req, res) => {
 module.exports = {
   register,
   login,
+  user,
   logout,
 };
