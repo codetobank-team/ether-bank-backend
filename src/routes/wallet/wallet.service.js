@@ -1,8 +1,9 @@
 const { Wallet } = require('../../database/models');
-const {logger, blockUtils: { createWallet }, accountNumber: { generate }, cryptoUtils: { encrypt } } = require('../../utils');
+const {
+  logger, blockUtils: { createWallet }, accountNumber: { generate }, cryptoUtils: { encrypt },
+} = require('../../utils');
 
 const WalletServiceLogger = logger(module);
-
 
 const findUserWallet = async (userId) => Wallet.findOne({ userId }).exec();
 

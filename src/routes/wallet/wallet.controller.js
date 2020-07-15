@@ -8,7 +8,7 @@ const getWallet = async (req, res) => {
   try {
     const wallet = await findUserWallet(userId);
     walletLogger.log('info', `User wallet retrieved: ${userId}`);
-    return responseObject(res, 200, wallet, 'data');
+    return responseObject(res, 200, { balance: '0.00', ...wallet.toJSON() }, 'data');
   } catch (error) {
     walletLogger.log('error', `Error fetching user wallet: ${error.message}`);
     return responseObject(res, 500, `Error fetching user wallet: ${error.message}`, 'error');
@@ -19,7 +19,7 @@ const createWallet = async (req, res) => {
   const { body: { transactionPin }, userId } = req;
   try {
     const wallet = await createUserWallet(userId, transactionPin);
-    return responseObject(res, 201, wallet, 'data');
+    return responseObject(res, 201, { balance: '0.00', ...wallet.toJSON() }, 'data');
   } catch (error) {
     return responseObject(res, 500, `Error creating user wallet: ${error.message}`, 'error');
   }
