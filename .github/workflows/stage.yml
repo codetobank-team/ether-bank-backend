@@ -5,9 +5,7 @@ on:
     branches: [ stage ]
   pull_request:
     branches: [ stage ]
-
 jobs:
-
   build:
     runs-on: ubuntu-latest
     env:
@@ -34,3 +32,4 @@ jobs:
         git config user.name "CI Tool"
         kustomize edit set image seyio/etherbank-api:${{ steps.slug.outputs.sha8 }}
         git commit -am '${{ steps.slug.outputs.sha8 }}' && git push || echo 'no changes'
+        ls
