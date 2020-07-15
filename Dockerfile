@@ -12,5 +12,6 @@ COPY . .
 COPY ./docker/run.sh /usr/bin/run.sh
 RUN chmod +x /usr/bin/run.sh
 
+EXPOSE 5000
 # execute start script
 CMD /usr/bin/run.sh
