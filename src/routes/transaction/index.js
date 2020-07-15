@@ -11,7 +11,6 @@ router.post(
   isLoggedIn,
   TransactionMiddleware.createTransactionValidationRules(),
   TransactionMiddleware.validate,
-  TransactionMiddleware.validateUserWithIdExist,
   createTransaction,
 );
 router.get(
