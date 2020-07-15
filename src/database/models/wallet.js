@@ -14,7 +14,7 @@ const walletSchema = new mongoose.Schema({
   accountNumber: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   address: {
     type: String,

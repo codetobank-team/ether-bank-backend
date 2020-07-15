@@ -5,7 +5,9 @@ const helmet = require('helmet');
 const logger = require('morgan');
 const rateLimit = require('express-rate-limit');
 const { APP_NAME } = require('./config');
-const { authRouter, userRouter, walletRouter, transactionRouter } = require('./routes');
+const {
+  authRouter, userRouter, walletRouter, transactionRouter,
+} = require('./routes');
 
 const app = express();
 
