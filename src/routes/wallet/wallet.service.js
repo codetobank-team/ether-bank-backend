@@ -1,6 +1,7 @@
 const { Wallet } = require('../../database/models');
 const {
-  logger, blockUtils: { createWallet, addressBalance }, accountNumber: { generate }, cryptoUtils: { encrypt },
+  logger, blockUtils: { createWallet, addressBalance },
+  accountNumber: { generate }, cryptoUtils: { encrypt },
 } = require('../../utils');
 
 const WalletServiceLogger = logger(module);
