@@ -4,7 +4,9 @@ const jwtUtils = require('./jwt');
 const responseObject = require('./responseObject');
 const isLoggedIn = require('./isLoggedIn');
 const cryptoUtils = require('./cryptoUtil');
-// const blockUtils = require('./blockUtil');
+const blockUtils = require('./blockUtil');
+const accountNumber = require('./accountNumber');
+const middleware = require('./middleware');
 
 module.exports = {
   logger,
@@ -13,5 +15,7 @@ module.exports = {
   responseObject,
   isLoggedIn,
   cryptoUtils,
-  // blockUtils,
+  blockUtils,
+  accountNumber,
+  middleware,
 };

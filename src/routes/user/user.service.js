@@ -1,5 +1,5 @@
 const { User } = require('../../database/models');
 
-const findUser = async (userId) => User.findById(userId).exec();
+const findUserById = (id) => User.findById(id).exec();
 
-module.exports = { findUser };
+module.exports = { findUserById };

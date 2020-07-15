@@ -11,6 +11,11 @@ const walletSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  accountNumber: {
+    type: String,
+    required: true,
+    unique: true
+  },
   address: {
     type: String,
     required: true,
@@ -27,6 +32,7 @@ const walletSchema = new mongoose.Schema({
     transform(doc, ret) {
       ret.id = doc._id;
       delete ret._id;
+      delete ret.privateKey;
       delete ret.__v;
     },
   },
@@ -35,12 +41,6 @@ const walletSchema = new mongoose.Schema({
 // walletSchema.pre('save', async function (next) {
 //   next();
 // });
-
-walletSchema.methods.toJSON = function () {
-  const walletObject = this.toObject();
-  delete walletObject.privateKey;
-  return walletObject;
-};
 
 walletSchema.methods.decryptPrivateKey = async function (inputPin) {
   return decrypt(this.privateKey, inputPin);

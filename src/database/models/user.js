@@ -61,7 +61,7 @@ userSchema.methods.comparePassword = async function (inputPassword) {
 };
 
 userSchema.methods.compareTransactionPin = async function (inputPin) {
-  const result = await compare(inputPin, this.pin);
+  const result = await compare(inputPin, this.transactionPin);
   return result;
 };
 

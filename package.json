@@ -45,6 +45,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.23",
     "morgan": "^1.10.0",
+    "randomstring": "^1.1.5",
     "redis": "^3.0.2",
     "web3": "^1.2.9",
     "winston": "^3.3.3"

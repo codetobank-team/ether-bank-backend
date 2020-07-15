@@ -1,4 +1,5 @@
 const { saveUser, findUser, findUserById } = require('./auth.service');
+const { createUserWallet } = require('../wallet/wallet.service');
 const { setAsync, delAsync } = require('../../redis');
 const {
   logger,
@@ -9,6 +10,7 @@ const {
 const authLogger = logger(module);
 
 const register = async (req, res) => {
+  let wallet = {};
   const {
     firstName,
     lastName,
@@ -26,6 +28,10 @@ const register = async (req, res) => {
       transactionPin,
     });
 
+    if (_id) {
+      wallet = await createUserWallet(_id, transactionPin);
+    }
+
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} created.`);
     const token = sign({ id: _id });
     await setAsync(`${_id}-token`, token, 'EX', 60 * 30);
@@ -34,7 +40,7 @@ const register = async (req, res) => {
       res,
       201,
       {
-        id: _id, firstName, lastName, email,
+        id: _id, firstName, lastName, email, wallet,
       },
       'data',
       token,

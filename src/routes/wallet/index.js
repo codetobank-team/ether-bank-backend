@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const { getUserWallet } = require('./wallet.controller');
+const { getWallet, createWallet } = require('./wallet.controller');
 const WalletMiddleware = require('./wallet.middleware');
-const { isLoggedIn } = require('../../utils');
+const { isLoggedIn, middleware: {checkTransactionPin, checkLogin} } = require('../../utils');
 
-router.get('/', isLoggedIn, WalletMiddleware.validateUserWalletExists, getUserWallet);
+router.get('/', isLoggedIn, WalletMiddleware.validateUserWalletExists, getWallet);
+router.post('/', checkLogin, WalletMiddleware.createWalletValidationRules(), WalletMiddleware.validate, checkTransactionPin, createWallet);
 
 module.exports = router;

@@ -1,9 +1,9 @@
-const { findUserWallet } = require('./wallet.service');
+const { findUserWallet, createUserWallet } = require('./wallet.service');
 const { logger, responseObject } = require('../../utils');
 
 const walletLogger = logger(module);
 
-const getUserWallet = async (req, res) => {
+const getWallet = async (req, res) => {
   const { userId } = req;
   try {
     const wallet = await findUserWallet(userId);
@@ -15,4 +15,14 @@ const getUserWallet = async (req, res) => {
   }
 };
 
-module.exports = { getUserWallet };
+const createWallet = async (req, res) => {
+  const { body: { transactionPin }, userId } = req;
+  try {
+    const wallet = await createUserWallet(userId, transactionPin);
+    return responseObject(res, 201, wallet, 'data');
+  } catch (error) {
+    return responseObject(res, 500, `Error creating user wallet: ${error.message}`, 'error');
+  }
+};
+
+module.exports = { getWallet, createWallet };

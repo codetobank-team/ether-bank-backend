@@ -1,4 +1,4 @@
-const { findUser } = require('./user.service');
+const { findUserById } = require('./user.service');
 const { logger, responseObject } = require('../../utils');
 
 const userLogger = logger(module);
@@ -7,7 +7,7 @@ const getUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await findUser(id);
+    const user = await findUserById(id);
     userLogger.log('info', `User with ${id} retrieved.`);
     return responseObject(res, 200, user, 'data');
   } catch (error) {
