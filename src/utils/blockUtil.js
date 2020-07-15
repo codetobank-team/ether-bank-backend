@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 
@@ -17,10 +18,11 @@ const contractConnection = async (contractPrivateKey, contractAddress) => {
   return contract.connect(contractWallet);
 };
 
-const web3Connection = () => {
+const web3Connection = (from) => {
+  from = from || CONTRACT_ADDRESS;
   const web3 = Web3Provider();
-  return new web3.eth.Contract(tokenABI, CONTRACT_ADDRESS);
-}
+  return new web3.eth.Contract(tokenABI, CONTRACT_ADDRESS, { from });
+};
 
 const createWallet = () => {
   const newWallet = Ethers.Wallet.createRandom();
@@ -47,7 +49,7 @@ const restoreWallet = (mnemonic) => {
 };
 
 const addressBalance = async (address) => {
-  const contract = web3Connection();
+  const contract = web3Connection(address);
   const balance = await contract.methods.balanceOf(address).call();
   return balance;
 };
