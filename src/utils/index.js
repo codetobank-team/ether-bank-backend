@@ -5,7 +5,7 @@ const responseObject = require('./responseObject');
 const cryptoUtils = require('./cryptoUtil');
 const blockUtils = require('./blockUtil');
 const accountNumber = require('./accountNumber');
-const validator = require('./validator');
+const validatorUtils = require('./validatorUtil');
 const middleware = require('./middleware');
 
 module.exports = {
@@ -16,6 +16,6 @@ module.exports = {
   cryptoUtils,
   blockUtils,
   accountNumber,
-  validator,
+  validatorUtils,
   middleware,
 };

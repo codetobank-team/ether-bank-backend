@@ -2,7 +2,7 @@
 const { saveTransaction, findTransaction, findWalletTransactions } = require('./transaction.service');
 const { findUserWallet, getAddressBalance, findWalletByAddressOrAccountNumber } = require('../wallet/wallet.service');
 const {
-  logger, responseObject, validator: { isEthereumAddress }, blockUtils: { sendToken },
+  logger, responseObject, validatorUtils: { isEthereumAddress }, blockUtils: { sendToken },
 } = require('../../utils');
 
 const transactionLogger = logger(module);
