@@ -34,7 +34,8 @@ const register = async (req, res) => {
 
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} created.`);
     const token = sign({ id: _id });
-    await setAsync(`${_id}-token`, token, 'EX', 60 * 5);
+    // FIXME: reduce TTL
+    await setAsync(`${_id}-token`, token, 'EX', 60 * 60 * 24);
 
     return responseObject(
       res,
@@ -67,7 +68,8 @@ const login = async (req, res) => {
 
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} logged in.`);
     const token = sign({ id: _id });
-    await setAsync(`${_id}-token`, token, 'EX', 60 * 5);
+    // FIXME: reduce TTL
+    await setAsync(`${_id}-token`, token, 'EX', 60 * 60 * 24);
 
     return responseObject(
       res,
