@@ -3,7 +3,7 @@ const {
   register, login, user, logout,
 } = require('./auth.controller');
 const AuthMiddleware = require('./auth.middleware');
-const { isLoggedIn } = require('../../utils');
+const { middleware: { checkLogin } } = require('../../utils');
 
 router.post(
   '/register',
@@ -20,14 +20,14 @@ router.post(
 );
 router.get(
   '/user',
-  isLoggedIn,
+  checkLogin,
   user,
 );
 router.post(
   '/logout',
   AuthMiddleware.logoutValidationRules(),
   AuthMiddleware.validate,
-  isLoggedIn,
+  checkLogin,
   logout,
 );
 

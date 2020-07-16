@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const { getUser } = require('./user.controller');
 const UserMiddleware = require('./user.middleware');
-const { isLoggedIn } = require('../../utils');
+const { middleware: { checkLogin } } = require('../../utils');
 
-router.get('/:id', isLoggedIn, UserMiddleware.validateUserExists, getUser);
+router.get('/:id', checkLogin, UserMiddleware.validateUserExists, getUser);
 
 module.exports = router;
