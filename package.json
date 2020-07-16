@@ -1,0 +1,61 @@
+{
+  "name": "ether-bank-backend",
+  "version": "1.0.0",
+  "description": "Backend of the hack to bank bootcamp project",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codetobank-team/ether-bank-backend.git"
+  },
+  "keywords": [
+    "ethereum",
+    "bitcoin",
+    "transaction",
+    "token",
+    "transfer"
+  ],
+  "author": "oyekunle-mark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codetobank-team/ether-bank-backend/issues"
+  },
+  "homepage": "https://github.com/codetobank-team/ether-bank-backend#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint:fix"
+    }
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.0.0",
+    "dotenv": "^8.2.0",
+    "ethers": "^5.0.5",
+    "express": "^4.17.1",
+    "express-rate-limit": "^5.1.3",
+    "express-validator": "^6.6.0",
+    "helmet": "^3.23.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.23",
+    "morgan": "^1.10.0",
+    "randomstring": "^1.1.5",
+    "redis": "^3.0.2",
+    "validator": "^13.1.1",
+    "web3": "^1.2.9",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "husky": "^4.2.5",
+    "nodemon": "^2.0.4"
+  }
+}
