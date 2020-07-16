@@ -5,7 +5,7 @@ class TransactionMiddleware {
   static createTransactionValidationRules() {
     return [
       body('recipient')
-        .isLength({min: 1})
+        .isLength({ min: 1 })
         .withMessage('Recipeint is required.'),
       body('amount')
         .isNumeric()
