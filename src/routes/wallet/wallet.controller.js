@@ -11,6 +11,7 @@ const getWallet = async (req, res) => {
     walletLogger.log('info', `User wallet retrieved: ${userId}`);
     return responseObject(res, 200, { balance, ...wallet.toJSON() }, 'data');
   } catch (error) {
+    console.log(error);
     walletLogger.log('error', `Error fetching user wallet: ${error.message}`);
     return responseObject(res, 500, `Error fetching user wallet: ${error.message}`, 'error');
   }

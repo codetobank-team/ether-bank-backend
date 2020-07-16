@@ -2,15 +2,17 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 
-const Ethers = require('ethers');
+
 const Web3 = require('web3');
+const Ethers = require('ethers');
+const crypto = require('crypto');
+const randomstring = require('randomstring');
+
 const NairaCoin = require('../contract/build/contracts/Nairacoin.json');
 const tokenABI = require('../contract/build/ethersabi/etherscontract.json');
 const { CONTRACT_ADDRESS, CONTRACT_PRIVATE_KEY } = require('../config');
-const { EthersProvider, Web3Provider } = require('./ethProvider.js');
+const { EthersProvider, Web3Provider } = require('./ethProvider');
 
-const randomstring = require('randomstring');
-const crypto = require('crypto');
 
 const contractConnection = async (contractPrivateKey, contractAddress) => {
   contractPrivateKey = contractPrivateKey || CONTRACT_PRIVATE_KEY;
@@ -21,10 +23,9 @@ const contractConnection = async (contractPrivateKey, contractAddress) => {
   return contract.connect(contractWallet);
 };
 
-const web3Connection = (from) => {
-  from = from || CONTRACT_ADDRESS;
+const web3Connection = (options = {}) => {
   const web3 = Web3Provider();
-  return new web3.eth.Contract(tokenABI, CONTRACT_ADDRESS, { from });
+  return new web3.eth.Contract(tokenABI, CONTRACT_ADDRESS, options);
 };
 
 const createWallet = () => {
@@ -52,15 +53,17 @@ const restoreWallet = (mnemonic) => {
 };
 
 const addressBalance = async (address) => {
-  const contract = web3Connection(address);
+  const web3 = Web3Provider();
+  const contract = web3Connection();
   const balance = await contract.methods.balanceOf(address).call();
-  // return balance;
-  return 1000;
+  const balanceInEthers = web3.utils.fromWei(balance, 'ether');
+  return balanceInEthers;
+  
 };
 
 const sendToken = async (sender, recipient, amount, privateKey) => {
   const hash = crypto.createHash('sha256').update(randomstring.generate()).digest('hex');
-  const timestamp = Date.now();
+  const timestamp = Date.now();  
   return {hash, timestamp};
 }
 

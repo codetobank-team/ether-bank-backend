@@ -1,6 +1,11 @@
 const { Wallet } = require('../../database/models');
+
 const {
-  logger, blockUtils: { createWallet, addressBalance },
+  findWalletReceivedTransactions,
+  findWalletSentTransactions,
+} = require('../transaction/transaction.service');
+const {
+  logger, blockUtils: { createWallet },
   accountNumber: { generate }, cryptoUtils: { encrypt },
 } = require('../../utils');
 
@@ -31,7 +36,30 @@ const createUserWallet = async (userId, userPin) => {
   return wallet;
 };
 
-const getAddressBalance = (address) => addressBalance(address);
+const dbTotalSpend = async (wallet) => {
+  const sentTxs = await findWalletSentTransactions(wallet);
+  if (!sentTxs.length) return 0;
+  const total = await sentTxs.map((tx) => tx.amount).reduce((totalAmt, amt) => totalAmt + amt);
+  return total;
+};
+
+const dbTotalReceived = async (wallet) => {
+  const receivedTxs = await findWalletReceivedTransactions(wallet);
+  if (!receivedTxs.length) return 0;
+  const total = await receivedTxs.map((tx) => tx.amount).reduce((totalAmt, amt) => totalAmt + amt);
+  return total;
+};
+
+const getAddressBalance = async (address) => {
+  // Blockchain implementation
+  // return addressBalance(address);
+
+  // DB value implementation
+  const wallet = await findWalletByAddressOrAccountNumber(address);
+  const sent = await dbTotalSpend(wallet);
+  const received = await dbTotalReceived(wallet);
+  return sent > received ? 0 : received - sent;
+};
 
 module.exports = {
   findUserWallet, createUserWallet, findWalletByAddressOrAccountNumber, getAddressBalance,

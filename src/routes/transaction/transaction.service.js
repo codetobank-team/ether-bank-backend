@@ -1,5 +1,5 @@
 const { Transaction } = require('../../database/models');
-const { validator: { isMongoObjectId } } = require('../../utils');
+const { validatorUtils: { isMongoObjectId } } = require('../../utils');
 
 const saveTransaction = async (data) => {
   const transaction = new Transaction(data);
@@ -22,8 +22,24 @@ const findWalletTransactions = (wallet) => Transaction.find({
   ],
 }).exec();
 
+const findWalletReceivedTransactions = (wallet) => Transaction.find({
+  $or: [
+    { recipient: wallet.address },
+    { recipient: wallet.accountNumber },
+  ],
+}).exec();
+
+const findWalletSentTransactions = (wallet) => Transaction.find({
+  $or: [
+    { sender: wallet.address },
+    { sender: wallet.accountNumber },
+  ],
+}).exec();
+
 module.exports = {
   saveTransaction,
   findTransaction,
   findWalletTransactions,
+  findWalletReceivedTransactions,
+  findWalletSentTransactions,
 };
