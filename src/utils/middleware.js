@@ -2,7 +2,7 @@
 const {
   verify,
 } = require('./jwt');
-const { getAsync } = require('../redis');
+const { getAsync, setAsync } = require('../redis');
 const responseObject = require('./responseObject');
 
 const checkTransactionPin = async (req, res, next) => {
@@ -50,7 +50,7 @@ const checkLogin = async (req, res, next) => {
     if (!cachedToken || token !== cachedToken) return responseObject(res, 401, 'Session timeout. Please log in.', 'error');
 
     // overwrite the key with a new TLL of five minutes
-    await setAsync(`${_id}-token`, token, 'EX', 60 * 5);
+    await setAsync(`${id}-token`, token, 'EX', 60 * 5);
 
     req.userId = id;
     next();
