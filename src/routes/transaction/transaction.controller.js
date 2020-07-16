@@ -31,7 +31,12 @@ const createTransaction = async (req, res) => {
 
     if (senderWallet.address === recipientAddress) { return responseObject(res, 400, 'Same wallet transfer not supported.', 'error'); }
 
-    const { hash, timestamp } = await sendToken(senderWallet.address, recipientAddress, amount, senderPrivateKey);
+    const { hash, timestamp } = await sendToken(
+      senderWallet.address,
+      recipientAddress,
+      amount,
+      senderPrivateKey,
+    );
 
     const newTransaction = await saveTransaction({
       sender: senderWallet.address,
