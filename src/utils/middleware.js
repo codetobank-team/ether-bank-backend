@@ -49,8 +49,9 @@ const checkLogin = async (req, res, next) => {
 
     if (!cachedToken || token !== cachedToken) return responseObject(res, 401, 'Session timeout. Please log in.', 'error');
 
-    // overwrite the key with a new TLL of five minutes
-    await setAsync(`${id}-token`, token, 'EX', 60 * 5);
+    // TODO: uncomment to update token TTL with usage
+    // // overwrite the key with a new TLL of five minutes
+    // await setAsync(`${id}-token`, token, 'EX', 60 * 5);
 
     req.userId = id;
     next();
