@@ -6,6 +6,7 @@ const isLoggedIn = require('./isLoggedIn');
 const cryptoUtils = require('./cryptoUtil');
 const blockUtils = require('./blockUtil');
 const accountNumber = require('./accountNumber');
+const validator = require('./validator');
 const middleware = require('./middleware');
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
   cryptoUtils,
   blockUtils,
   accountNumber,
+  validator,
   middleware,
 };

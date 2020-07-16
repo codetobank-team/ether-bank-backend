@@ -9,6 +9,9 @@ const tokenABI = require('../contract/build/ethersabi/etherscontract.json');
 const { CONTRACT_ADDRESS, CONTRACT_PRIVATE_KEY } = require('../config');
 const { EthersProvider, Web3Provider } = require('./ethProvider.js');
 
+const randomstring = require('randomstring');
+const crypto = require('crypto');
+
 const contractConnection = async (contractPrivateKey, contractAddress) => {
   contractPrivateKey = contractPrivateKey || CONTRACT_PRIVATE_KEY;
   contractAddress = contractAddress || CONTRACT_ADDRESS;
@@ -51,12 +54,20 @@ const restoreWallet = (mnemonic) => {
 const addressBalance = async (address) => {
   const contract = web3Connection(address);
   const balance = await contract.methods.balanceOf(address).call();
-  return balance;
+  // return balance;
+  return 1000;
 };
+
+const sendToken = async (sender, recipient, amount, privateKey) => {
+  const hash = crypto.createHash('sha256').update(randomstring.generate()).digest('hex');
+  const timestamp = Date.now();
+  return {hash, timestamp};
+}
 
 module.exports = {
   contractConnection,
   createWallet,
   restoreWallet,
   addressBalance,
+  sendToken,
 };

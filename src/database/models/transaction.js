@@ -3,10 +3,6 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
   sender: {
     type: String,
     ref: 'Wallet',
@@ -19,18 +15,14 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  transactionType: {
-    type: String,
-    enum: ['sent', 'received'],
-  },
   amount: {
-    type: String,
+    type: Number,
     required: true,
   },
-  transactionStatus: {
+  status: {
     type: String,
     enum: ['pending', 'completed', 'failed'],
-    default: 'pending',
+    default: 'completed',
   },
   blockchainTimestamp: {
     type: Number,

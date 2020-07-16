@@ -6,6 +6,10 @@ const {
 
 const WalletServiceLogger = logger(module);
 
+const findWalletByAddressOrAccountNumber = async (data) => Wallet.findOne({
+  $or: [{ address: data }, { accountNumber: data }],
+}).exec();
+
 const findUserWallet = async (userId) => Wallet.findOne({ userId }).exec();
 
 const createUserWallet = async (userId, userPin) => {
@@ -27,15 +31,8 @@ const createUserWallet = async (userId, userPin) => {
   return wallet;
 };
 
-const getAddressBalance = async (address) => {
-  let balance = '0.00';
-  try {
-    balance = await addressBalance(address);
-  } catch (error) {
-    WalletServiceLogger.log('error', `Error getting address balance: ${address}`);
-  }
+const getAddressBalance = (address) => addressBalance(address);
 
-  return balance;
+module.exports = {
+  findUserWallet, createUserWallet, findWalletByAddressOrAccountNumber, getAddressBalance,
 };
-
-module.exports = { findUserWallet, createUserWallet, getAddressBalance };
