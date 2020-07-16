@@ -34,7 +34,7 @@ const register = async (req, res) => {
 
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} created.`);
     const token = sign({ id: _id });
-    await setAsync(`${_id}-token`, token, 'EX', 60 * 5);
+    await setAsync(`${_id}-token`, token, 'EX', 60 * 30);
 
     return responseObject(
       res,
@@ -67,7 +67,7 @@ const login = async (req, res) => {
 
     authLogger.log('info', `User ${firstName} ${lastName} - ${email} logged in.`);
     const token = sign({ id: _id });
-    await setAsync(`${_id}-token`, token, 'EX', 60 * 5);
+    await setAsync(`${_id}-token`, token, 'EX', 60 * 30);
 
     return responseObject(
       res,

@@ -2,27 +2,24 @@ const {
   verify,
 } = require('./jwt');
 const responseObject = require('./responseObject');
-const { getAsync, setAsync } = require('../redis');
+const { getAsync } = require('../redis');
 
 // eslint-disable-next-line consistent-return
 module.exports = async (req, res, next) => {
   try {
     const authHeader = req.get('Authorization');
-    if (!authHeader) return responseObject(res, 401, 'Please provide an authorization header', 'error');
+    if (!authHeader) return responseObject(res, 401, 'You must be logged in to use this endpoint', 'error');
 
     const token = authHeader.split(' ')[1];
-    if (!token) return responseObject(res, 401, 'Please add token to authorization header', 'error');
+    if (!token) return responseObject(res, 401, 'You must be logged in to use this endpoint', 'error');
 
     const payload = verify(token);
-    if (!payload) return responseObject(res, 401, 'Invalid token', 'error');
+    if (!payload) return responseObject(res, 401, 'You must be logged in to use this endpoint', 'error');
     const { id } = payload;
 
     const cachedToken = await getAsync(`${id}-token`);
 
-    if (!cachedToken || token !== cachedToken) return responseObject(res, 401, 'Session timeout. Please log in.', 'error');
-
-    // overwrite the key with a new TLL of five minutes
-    await setAsync(`${_id}-token`, token, 'EX', 60 * 5);
+    if (!cachedToken || token !== cachedToken) return responseObject(res, 401, 'You must be logged in to use this endpoint', 'error');
 
     req.userId = id;
     next();
