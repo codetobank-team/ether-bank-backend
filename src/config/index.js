@@ -16,4 +16,6 @@ module.exports = {
   BLOCKCHAIN_PROVIDER: process.env.BLOCKCHAIN_PROVIDER || null,
   CONTRACT_PRIVATE_KEY: process.env.CONTRACT_PRIVATE_KEY,
   CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
+  BLOCK_TX_VALUE: process.env.BLOCK_TX_VALUE || '0x0',
+  BLOCK_TX_CHAINID: process.env.BLOCK_TX_CHAINID || '0x03',
 };
